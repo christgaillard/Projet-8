@@ -1,8 +1,8 @@
 Flask==2.0.2
-sklearn
 tensorflow == 2.4
 keras==2.6
-pandas==1.4.3
 segmentation-models
 albumentations
+sklearn
+numpy
 
