@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+        <div class="px-4 py-3 my-2 text-center">
+
+            <h1 class="display-6 fw-bold text-primary">Future vision transport </h1>
+          </div>
+        <form method="post"  action="{{url_for('analyse_file')}}" enctype="multipart/form-data">
+            <div class="col-md-6 mx-auto text-center">
+                <label class="form-label fw-bold fs-5">Selectionnez votre image:</label>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-1">
+                    <select name="img" id="img">
+                         {%for i in range(0, len)%}
+                          <option value="{{imglist[i]}}">{{imglist[i]}}</option>
+                         {%endfor%}
+                    </select>
+                  </div>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-2">
+                  <button type="submit" class="btn btn-primary btn-lg px-4 gap-3" onclick="myFunction()" >Soumaitre votre image</button>
+                </div>
+            </div>
+        </form>
+<div class="bd-example" id="demo" align="middle" style="display:none">
+ <span class="timer" id="timer">{{ rest }}s</span>
+    <progress max="50" value="0" class="progress progress--rest" id="progressBar"></progress>
+    </div>
+
+<script>
+function myFunction() {
+  document.getElementById("demo").style.display = "block";
+}
+</script>
+
+<script type="application/javascript">
+        const timerElement = document.getElementById("timer");
+        const progressBar = document.getElementById("progressBar")
+        var timerCounter = progressBar.max;
+        const interval = setInterval(() => {
+            if (timerCounter <= 1) {
+               // window.location.href = "{{ url_for('analyse_file') }}";
+                clearInterval(interval);
+            }
+            timerCounter = timerCounter - 1;
+
+            timerElement.innerText = timerCounter + "s";
+            progressBar.value = timerCounter;
+        }, 1000);
+    </script>
+{% endblock %}
