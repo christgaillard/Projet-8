@@ -24,18 +24,20 @@ from segmentation_models.losses import bce_jaccard_loss
 from segmentation_models.metrics import iou_score
 
 import albumentations as A
-'''
-Fonction pour le nettoyage du texte
-supprime les @, http, nombres etc...
-'''
+
 
 
 def round_clip_0_1 ( x, **kwargs ) :
     return x.round().clip(0, 1)
 
 
-# define heavy augmentations
-def get_training_augmentation () :
+
+def get_training_augmentation():
+    '''
+    Transforme les images et masks d'orrigine afin d'augmenter la quntité de features pour l'apprentissage.
+    p définie une proba d'apliquer ou non l'augmentation
+    :return: Image etmasque.
+    '''
     train_transform = [
 
         A.HorizontalFlip(p=0.5),
@@ -111,34 +113,13 @@ def Weighted_BCEnDice_loss ( y_true, y_pred ) :
     return loss
 
 
-def weighted_bce_loss ( y_true, y_pred, weight ) :
-    # avoiding overflow
-    epsilon = 1e-7
-    y_pred = K.clip(y_pred, epsilon, 1. - epsilon)
-    logit_y_pred = K.log(y_pred / (1. - y_pred))
-    # logit_y_pred = y_pred
-
-    loss = (1. - y_true) * logit_y_pred + (1. + (weight - 1.) * y_true) * \
-           (K.log(1. + K.exp(-K.abs(logit_y_pred))) + K.maximum(-logit_y_pred, 0.))
-    return K.sum(loss) / K.sum(weight)
-
-
-def weighted_dice_loss ( y_true, y_pred, weight ) :
-    smooth = 1.
-    w, m1, m2 = weight * weight, y_true, y_pred
-    intersection = (m1 * m2)
-    score = (2. * K.sum(w * intersection) + smooth) / (
-                K.sum(w * (m1 ** 2)) + K.sum(w * (m2 ** 2)) + smooth)  # Uptill here is Dice Loss with squared
-    loss = 1. - K.sum(score)  # Soft Dice Loss
-    return loss
-
-
-
-
-
-
 def load_model(modelpath,weightspath):
-
+    '''
+    Charge le model et les weight ainsi que les custom objects utilisés pour l'apprentissage du model.
+    :param modelpath: string
+    :param weightspath: string
+    :return: Object
+    '''
     model = tf.keras.models.load_model(
         modelpath,
         custom_objects={'Weighted_BCEnDice_loss' : Weighted_BCEnDice_loss, 'iou_score' : sm.metrics.iou_score})

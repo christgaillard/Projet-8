@@ -16,6 +16,10 @@ weightspath = os.path.join(app.root_path, 'model/FPN_pretrained_eficiannet_ecc_j
 # page d'accueil de l'app
 @app.route('/')
 def index():
+    '''
+    liste les images présentes dans le dossier database.
+    :return:
+    '''
     indexes = list(set(["_".join(path.split('_')[:3]) for path in os.listdir(app.config['DATA_FOLDER'])]))
     pathindexes = [os.path.join(app.config['DATA_FOLDER'], path) for path in indexes]
 
@@ -26,8 +30,16 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+'''
+
+'''
 @app.route('/analyse_file', methods=['GET', 'POST'])
 def analyse_file():
+    '''
+    reçoit le nom de l'image, prédit le masque
+    créer une image complète des 3 images
+    :return: path to image.
+    '''
     if request.method == 'POST':
         chem = os.path.join(app.root_path, 'static/database/')
         name =  request.form['img']
@@ -55,7 +67,11 @@ def analyse_file():
 
 @app.route('/analyse_api', methods=['GET', 'POST'])
 def analyse_api():
-    #if request.method == 'POST':
+    '''
+    Reussoit l'image serialiser,
+     load le model et predit le mask à partir de l'image.
+    :return:  le mask serialiser.
+    '''
     response_data = []
     mondict = {}
     request_data = request.get_json()
