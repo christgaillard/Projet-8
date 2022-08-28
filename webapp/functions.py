@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow.keras import backend as K
 from tensorflow.keras.preprocessing import image
 from tensorflow.python.keras.losses import binary_crossentropy
-import cv2
+
 from tensorflow.python.keras.models import Model, load_model
 from tensorflow.python.keras.callbacks import TensorBoard, ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 from tensorflow.python.keras.layers import Input, Conv2D, MaxPooling2D, concatenate, Conv2DTranspose, BatchNormalization, Activation, Dropout, Reshape, UpSampling2D

@@ -7,7 +7,7 @@ import pickle
 import json
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, jsonify
 
-
+#using flak
 app = Flask(__name__,) #initialisation de Flask
 IMG_FOLDER = os.path.join('static', 'IMG')
 app.config['DATA_FOLDER'] = os.path.join(app.root_path, 'static/database')
